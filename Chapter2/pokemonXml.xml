@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pokemon>
+	<row>
+		<id> 001</id>
+		<typeTwo> Poison</typeTwo>
+		<name> Bulbasaur</name>
+		<type> Grass</type>
+	</row>
+	<row>
+		<id> 002</id>
+		<typeTwo> Poison</typeTwo>
+		<name> Ivysaur</name>
+		<type> Grass</type>
+	</row>
+	<row>
+		<id> 003</id>
+		<typeTwo> Poison</typeTwo>
+		<name> Venusaur</name>
+		<type> Grass</type>
+	</row>
+	<row>
+		<id> 006</id>
+		<typeTwo> Flying</typeTwo>
+		<name> Charizard</name>
+		<type> Fire</type>
+	</row>
+	<row>
+		<id> 012</id>
+		<typeTwo> Flying</typeTwo>
+		<name> Butterfree</name>
+		<type> Bug</type>
+	</row>
+	<row>
+		<id> 013</id>
+		<typeTwo> Poison</typeTwo>
+		<name> Weedle</name>
+		<type> Bug</type>
+	</row>
+	<row>
+		<id> 014</id>
+		<typeTwo> Poison</typeTwo>
+		<name> Kakuna</name>
+		<type> Bug</type>
+	</row>
+	<row>
+		<id> 015</id>
+		<typeTwo> Poison</typeTwo>
+		<name> Beedrill</name>
+		<type> Bug</type>
+	</row>
+	<row>
+		<id> 016</id>
+		<typeTwo> Flying</typeTwo>
+		<name> Pidgey</name>
+		<type> Normal</type>
+	</row>
+	<row>
+		<id> 017</id>
+		<typeTwo> Flying</typeTwo>
+		<name> Pidgeotto</name>
+		<type> Normal</type>
+	</row>
+	<row>
+		<id> 018</id>
+		<typeTwo> Flying</typeTwo>
+		<name> Pidgeot</name>
+		<type> Normal</type>
+	</row>
+</pokemon>
+	

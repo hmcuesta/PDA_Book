@@ -1,0 +1,56 @@
+	
+<script src="http://d3js.org/d3.v3.min.js"></script>
+		
+	
+	<body>
+		<script type="text/javascript">
+
+			var data = [];
+			
+			for(var i=0; i < 100; i++ ){
+			
+				var axisX = Math.round(Math.random() * 700);
+				var axisY = Math.round(Math.random() * 500);
+				data.push([axisX,axisY]);
+			
+			}
+			
+	
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", 800)
+						.attr("height", 500);
+
+
+			svg.selectAll("circle").data(data)
+			   .enter()
+			   .append("circle")
+			   .attr("cx", function(d) {
+			   		return d[0];
+			   })
+			   .attr("cy", function(d) {
+			   		return d[1];
+			   })
+			   .attr("r", function(d) {
+			   		return 10;
+			   })
+			   .attr("fill", "steelblue");
+
+			svg.selectAll("text").data(data)
+			   .enter()
+			   .append("text")
+			   .text(function(d) {
+			   		return d[0] + "," + d[1];
+			   })
+			   .attr("x", function(d) {
+			   		return d[0];
+			   })
+			   .attr("y", function(d) {
+			   		return d[1];
+			   })
+			   .attr("font-family", "sans-serif")
+			   .attr("font-size", "11px")
+			   .attr("fill", "black");
+			
+		</script>
+	</body>

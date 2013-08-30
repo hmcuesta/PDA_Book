@@ -1,0 +1,106 @@
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 20px arial;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+}
+.line {
+  fill: none;
+  stroke-width: 3.5px;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+
+var parseDate = d3.time.format("%m/%d/%Y").parse;
+
+var x = d3.time.scale()
+    .range([0, 1000]);
+
+var y = d3.scale.linear()
+    .range([500, 0]);
+
+var color = d3.scale.ordinal()
+    .range(["#04B486", "#0033CC", "#CC3300"]);
+
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .interpolate("basis")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.currency); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", 1100)
+    .attr("height", 550)
+  .append("g")
+    .attr("transform", "translate(20,50)");
+
+d3.csv("multiLine.csv", function(error, data) {
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+  });
+
+  var currencies = color.domain().map(function(name) {
+    return {
+      name: name,
+      values: data.map(function(d) {
+        return {date: d.date, currency: +d[name]};
+      })
+    };
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([
+    d3.min(currencies, function(c) { return d3.min(c.values, function(v) { return v.currency; }); }),
+    d3.max(currencies, function(c) { return d3.max(c.values, function(v) { return v.currency; }); })
+  ]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0,550)")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    
+  var country = svg.selectAll(".country")
+      .data(currencies)
+    .enter().append("g")
+	  .style("fill", function(d) { return color(d.name); })
+	  .attr("class", "country");
+
+  country.append("path")
+      .attr("class", "line")
+	  .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return color(d.name); });
+
+  country.append("text")
+      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.currency) + ")"; })
+      .attr("x", 10)
+	  .attr("y", 20)
+      .attr("dy", ".50em")
+      .text(function(d) { return d.name; });
+});
+
+</script>

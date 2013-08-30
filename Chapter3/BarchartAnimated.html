@@ -1,0 +1,83 @@
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 14px arial;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+}
+.bar {
+  fill: gray;
+}
+
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+var formato = d3.format("0.0");
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, 1100], .1);
+
+var y = d3.scale.linear()
+    .range([500, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(formato);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", 1200)
+    .attr("height", 550)
+  .append("g")
+    .attr("transform", "translate(50,20)
+	;
+	
+d3.tsv("pokemonByType.tsv", function(error, data) {
+
+  data.forEach(function(d) {
+    d.amount = +d.amount;
+  });
+
+  x.domain(data.map(function(d) { return d.type; }));
+  y.domain([0, d3.max(data, function(d) { return d.amount; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0,550)")
+      .call(xAxis);
+	  
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+  
+  svg.selectAll(".bar")
+      .data(data)
+	  .enter().append("rect")
+	  .on('click', function(d,i) {
+    d3.select(this).style('fill','red');
+	})
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.type); })
+      .attr("width", x.rangeBand())
+	  .transition().delay(function (d,i){ return i * 300;}).duration(300)
+      .attr("y", function(d) { return y(d.amount); })
+      .attr("height", function(d) { return 550 - y(d.amount); })
+	  ;
+      
+});
+
+
+</script>

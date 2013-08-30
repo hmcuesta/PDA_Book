@@ -1,0 +1,58 @@
+<style>
+
+body {
+  font: 16px arial;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+var w = 1160,
+    h = 700,
+    radius = Math.min(w, h) / 2;
+
+var color = d3.scale.ordinal()
+    .range(["#DF9496","#A2ADBC","#F4F3EE", "#D9E2E1", "#2BBBD8","#D0E8F4"]);
+
+	//.range(["#3366CC","#F5F6CE","#F2F2F2","#00BFFF","#3366CC","#FF3300", "#CCFF33"]);
+
+	
+var arc = d3.svg.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(150);
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.amount; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", w)
+    .attr("height", h)
+  .append("g")
+    .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+
+d3.csv("pokemonByType.csv", function(error, data) {
+
+  data.forEach(function(d) {
+    d.amount = +d.amount;
+  });
+
+  var g = svg.selectAll(".arc")
+      .data(pie(data))
+    .enter().append("g")
+      .attr("class", "arc");
+
+  g.append("path")
+      .attr("d", arc)
+      .style("fill", function(d) { return color(d.data.type); });
+
+  g.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".60em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.data.type; });
+
+});
+
+</script>
