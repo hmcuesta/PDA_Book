@@ -1,0 +1,105 @@
+<html>
+ 
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Random walk</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <style type="text/css">
+ 
+body {
+  background: #fff;
+}
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+}
+     </style>
+</head>
+<body>
+<script type="text/javascript">
+ 
+var color = "rgb(0,76,153)";
+var GRID = 6,
+HEIGHT = 600,
+WIDTH = 600,
+delay = 50,
+svg = d3.select("body").append("svg:svg")
+  .attr("width", WIDTH + 50)
+  .attr("height", HEIGHT + 30)
+ .append("g")
+  .attr("transform", "translate(30,0)");
+  
+var x = d3.scale.identity()
+    .domain([0, WIDTH]);
+
+var y = d3.scale.linear()
+    .domain([0, HEIGHT])
+    .range([HEIGHT, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickSize(2, -HEIGHT);
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickSize(6, -WIDTH);
+	
+svg.append("g")
+    .attr("class", "y axis")
+	.attr("transform", "translate(0,0)")
+    .call(yAxis);
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0,600)")
+    .call(xAxis);
+
+svg.append("text")      
+        .attr("x", 270 )
+        .attr("y",  50 )
+        .style("text-anchor", "middle")
+        .text("Random Walk Simulation");
+
+		
+
+randomWalk(WIDTH / 2, 0);
+
+ 
+function randomWalk(x, y) {
+  var x_end, y_end = y + GRID;
+  if (Math.random() < 0.5) {
+    x_end = x + GRID;
+  } else {
+    x_end = x - GRID;
+  }
+  line = svg.select('line[x1="' + x + '"][x2="' + x_end + '"]'+
+                    '[y1="' + y + '"][y2="' + y_end + '"]');
+  svg.append("svg:line")
+      .attr("x1", y)
+      .attr("y1", x)
+      .attr("x2", y_end)
+      .attr("y2", x_end)
+      .style("stroke", color)
+      .style("stroke-width", 3)
+      .datum(0);
+ 
+  if (y_end >= HEIGHT) {
+	color = "rgb("+Math.floor(Math.random()*254)+","+Math.floor(Math.random()*254)+","+Math.floor(Math.random()*254)+")"
+    x_end = WIDTH / 2;
+    y_end = 0;
+  }
+  window.setTimeout(function() {
+    randomWalk(x_end, y_end);
+  }, delay);
+}
+ 
+</script>
+</body>
+</html> 

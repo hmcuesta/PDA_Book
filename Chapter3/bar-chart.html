@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <meta charset="utf-8">
 <style>
 
@@ -23,14 +24,17 @@ body {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
 
+var margin = {top: 20, right: 30, bottom: 30, left: 50},
+    width = 1200 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
 var formato = d3.format("0.0");
 
 var x = d3.scale.ordinal()
-    .rangeRoundBands([0, 1200], .1);
+    .rangeRoundBands([0, width], .1);
 
 var y = d3.scale.linear()
-    .range([500, 0]);
+    .range([height, 0]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -42,8 +46,8 @@ var yAxis = d3.svg.axis()
     .tickFormat(formato);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", 1300)
-    .attr("height", 550)
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -55,10 +59,10 @@ d3.csv("pokemonByType.csv", function(error, data) {
 
   x.domain(data.map(function(d) { return d.type; }));
   y.domain([0, d3.max(data, function(d) { return d.amount; })]);
-
+ 
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0,550)")
+      .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
   svg.append("g")
@@ -78,7 +82,7 @@ d3.csv("pokemonByType.csv", function(error, data) {
       .attr("x", function(d) { return x(d.type); })
       .attr("width", x.rangeBand())
       .attr("y", function(d) { return y(d.amount); })
-      .attr("height", function(d) { return 550 - y(d.amount); });
+      .attr("height", function(d) { return height - y(d.amount); });
 
 });
 

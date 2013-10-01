@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="d3.layout.cloud.js"></script>
+<script>
+  var fill = d3.scale.category20();
+  var data = [];
+  
+  d3.csv("data.csv", function(w) {
+    w.forEach( function (d) {
+        data.push({text: d.text, size: d.size});
+    });
+   
+  d3.layout.cloud().size([800, 400])
+      .words(data)
+      .padding(5)
+      .rotate(function() { return ~~(Math.random() * 2) * 90; })
+      .font("Impact")
+      .fontSize(function(d) { return d.size; })
+      .on("end", draw)
+      .start();
+});
+
+  function draw(words) {
+    d3.select("body").append("svg")
+        .attr("width", 800)
+        .attr("height", 400)
+      .append("g")
+        .attr("transform", "translate(350,250)")
+      .selectAll("text")
+        .data(words)
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; });
+  }
+</script>
